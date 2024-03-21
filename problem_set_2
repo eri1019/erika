@@ -1,1 +1,54 @@
+using System;
+using System.Collections.Generic;
 
+public class Solution
+{
+
+ public static void Main(string[] args)
+    {
+        // Test the function with an example input string
+        var result = IsValid("((){})");
+        Console.WriteLine("Is the input string valid? " + result);
+
+        result = IsValid("(()))");
+        Console.WriteLine("Is the input string valid? " + result);
+
+        result = IsValid("()[]{}");
+        Console.WriteLine("Is the input string valid? " + result);
+    }
+
+    public static bool IsValid(string s)
+    {
+        // Create a stack to store the opening brackets
+        var stack = new Stack<char>();
+
+        // Iterate over each character in the input string
+        foreach (var c in s)
+        {
+            // If the character is an opening bracket, push it onto the stack
+            if (c == '(' || c == '{' || c == '[')
+            {
+                stack.Push(c);
+            }
+            // If the character is a closing bracket, check if the stack is empty
+
+            else if (stack.Count == 0 ||
+                     (c == ')' && stack.Peek() != '(') ||
+                     (c == '}' && stack.Peek() != '{') ||
+                     (c == ']' && stack.Peek() != '['))
+            {
+                // If so, return false
+                return false;
+            }
+            // If the character is a closing bracket, pop the corresponding opening bracket from the stack
+            else
+            {
+                stack.Pop();
+            }
+        }
+
+        // If the stack is empty, return true
+        return stack.Count == 0;
+    }
+
+}

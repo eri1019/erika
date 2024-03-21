@@ -1,1 +1,56 @@
+using System;
+using System.Collections.Generic;
 
+public class Solution
+{
+    public static IList<IList<int>> PalindromePairs(string[] words)
+    {
+        // Create a hash set of words to enable fast lookup of words
+        var wordsSet = new HashSet<string>();
+        for (int i = 0; i < words.Length; i++)
+        {
+            wordsSet.Add(words[i]);
+        }
+
+        // Create a list to store the resulting pairs of indices
+        var res = new List<IList<int>>();
+
+        // Iterate over each word in the list
+        for (int i = 0; i < words.Length; i++)
+        {
+            var word = words[i];
+
+            // Iterate over each possible substring of the word
+            for (int j = 0; j <= word.Length; j++)
+            {
+                // Get the first half of the word
+                var firstHalf = word.Substring(0, j);
+
+                // Get the second half of the word, reversed
+                var secondHalfReversed = word.Substring(j).Reverse().ToString();
+
+                // Check if the second half of the word, reversed, is in the hash set
+                // and is not equal to the first half of the word
+                if (wordsSet.Contains(secondHalfReversed) && !firstHalf.Equals(secondHalfReversed))
+                {
+                    // If so, add the pair of indices to the result list
+                    res.Add(new List<int>() { i, wordsSet.IndexOf(secondHalfReversed) });
+                }
+
+                // Get the first half of the word, reversed
+                var firstHalfReversed = word.Substring(j).Reverse().ToString();
+
+                // Check if the first half of the word, reversed, is in the hash set
+                // and is not equal to the first half ofthe word
+                if (j > 0 && wordsSet.Contains(firstHalfReversed) && !firstHalf.Equals(firstHalfReversed))
+                {
+                    // If so, add the pair of indices to the result list
+                    res.Add(new List<int>() { wordsSet.IndexOf(firstHalfReversed), i });
+                }
+            }
+        }
+
+        // Return the result list
+        return res;
+    }
+}

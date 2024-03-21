@@ -1,1 +1,77 @@
 
+using System;
+using System.Linq;
+
+public class Solution
+{
+    public static int LengthOfLIS(int[] nums)
+    {
+        // Create a list to store the lengths of the longest increasing subsequences ending at each index
+        var dp = new List<int>();
+
+        // Iterate over each element in the input array
+        foreach (var num in nums)
+        {
+            // Binary search for the largest index 
+            var idx = dp.BinarySearch(num);
+
+            // If the binary search returns a negative value, it means that the current element is larger than all elements in the list
+
+            if (idx < 0)
+            {
+                idx = ~idx;
+            }
+
+            // If the binary search returns a non-negative value, it means that the current element is smaller than or equal to the element at index i
+          
+            else
+            {
+                dp[idx] = num;
+            }
+
+            // If the binary search returns an index that is out of bounds, we need to add the current element to the end of the list
+            if (idx == dp.Count)
+            {
+                dp.Add(num);
+            }
+        }
+
+        // The length of the longest increasing subsequence is equal to the length of the list
+        return dp.Count;
+    }
+
+    public static void Main(string[] args)
+    {
+        // Test the function with an example input array
+        var nums = new int[] { 10, 9, 2, 5, 3, 7, 101, 18 };
+        var result = LengthOfLIS(nums);
+        Console.WriteLine("Length of the longest increasing subsequence: " + result);
+    }
+
+    // Helper function to perform a binary search in a sorted list
+    private static int BinarySearch(this List<int> list, int target)
+    {
+        int left = 0;
+        int right = list.Count - 1;
+
+        while (left <= right)
+        {
+            int mid = left + (right - left) / 2;
+
+            if (list[mid] == target)
+            {
+                return mid;
+            }
+            else if (list[mid] < target)
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                right = mid - 1;
+            }
+        }
+
+        return ~left;
+    }
+}
